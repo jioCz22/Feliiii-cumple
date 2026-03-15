@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>¡Feliz Cumpleaños, Ninita!</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+font-family:'Segoe UI',Trebuchet MS,sans-serif;
+overflow:hidden;
+position:relative;
+}
+
+/* fondo */
+
+body::before{
+content:'';
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-image:
+radial-gradient(circle at 20% 50%,rgba(228,26,28,0.1) 0%,transparent 50%),
+radial-gradient(circle at 80% 80%,rgba(255,182,193,0.08) 0%,transparent 50%);
+pointer-events:none;
+z-index:1;
+}
+
+/* decoracion */
+
+body::after{
+content:'🎀';
+position:fixed;
+font-size:4em;
+opacity:.1;
+pointer-events:none;
+z-index:0;
+animation:floatDecor 3s ease-in-out infinite;
+}
+
+@keyframes floatDecor{
+0%,100%{transform:translateY(0) translateX(0);}
+50%{transform:translateY(-20px) translateX(10px);}
+}
+
+.card{
+background:rgba(30,30,46,.95);
+border-radius:20px;
+padding:50px 40px;
+box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(228,26,28,.2);
+text-align:center;
+max-width:450px;
+z-index:2;
+position:relative;
+border:2px solid rgba(228,26,28,.3);
+}
+
+.kitty-bow-top{
+font-size:2.5em;
+margin-bottom:10px;
+animation:bounce .9s infinite;
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+}
+
+h1{
+color:#e81b23;
+font-size:2.8em;
+margin-bottom:5px;
+text-shadow:0 4px 8px rgba(0,0,0,.5);
+}
+
+.subtitle{
+color:#ffb6c1;
+font-size:1.2em;
+margin-bottom:15px;
+font-style:italic;
+}
+
+p{
+font-size:1.15em;
+color:#d0d0d0;
+margin-bottom:20px;
+line-height:1.6;
+}
+
+.love{
+font-size:2.2em;
+color:#ffb6c1;
+animation:heartbeat .6s infinite;
+display:block;
+margin:15px 0;
+}
+
+@keyframes heartbeat{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.25);}
+}
+
+@keyframes glow{
+0%,100%{text-shadow:0 0 10px rgba(232,27,35,.5);}
+50%{text-shadow:0 0 20px rgba(232,27,35,.8);}
+}
+
+button{
+background:linear-gradient(135deg,#e81b23,#c41119);
+color:#fff;
+border:none;
+border-radius:30px;
+padding:14px 36px;
+font-size:1.1em;
+cursor:pointer;
+box-shadow:0 6px 20px rgba(232,27,35,.4);
+}
+
+#confetti-canvas{
+position:fixed;
+pointer-events:none;
+left:0;
+top:0;
+width:100vw;
+height:100vh;
+z-index:10;
+}
+
+/* popup */
+
+.popup-letter-bg{
+display:none;
+position:fixed;
+z-index:20;
+left:0;
+top:0;
+width:100vw;
+height:100vh;
+background:rgba(0,0,0,.6);
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(5px);
+}
+
+.popup-letter-bg.active{
+display:flex;
+animation:fadeIn .25s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0}
+to{opacity:1}
+}
+
+.popup-letter{
+background:#1e1e2e;
+border-radius:20px;
+max-width:500px;
+max-height:85vh;
+padding:40px 35px;
+text-align:center;
+position:relative;
+animation:popUp .35s cubic-bezier(.68,-0.55,.27,1.55);
+overflow-y:auto;
+}
+
+@keyframes popUp{
+0%{transform:scale(.3);opacity:0;}
+100%{transform:scale(1);opacity:1;}
+}
+
+.rpatz-mention{
+color:#ffb6c1;
+font-weight:600;
+animation:glow 1s infinite;
+}
+
+.kitty-icon{
+font-size:3em;
+margin:15px 0;
+animation:float 1.5s infinite;
+}
+
+.rpatz-icon{
+font-size:2em;
+margin:0 5px;
+animation:float 1.5s infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="card">
+<div class="kitty-bow-top">🎀</div>
+
+<h1>¡Feliz Cumpleaños! 🎂</h1>
+
+<p class="subtitle">Nina</p>
+
+<p>
+Creeme que te deseo el mejor cumple del mundo aunque no hablamos<br>
+es lindo volver a recuperar tu amistad y espero dure muchisimo<br>
+<span class="love">🎀 Te quiero un montón 🎀</span>
+</p>
+
+<button onclick="showSurprise()">¡ABRE TU SORPRESA!</button>
+
+</div>
+
+<!-- carta -->
+
+<div class="popup-letter-bg" id="popupLetterBg">
+
+<div class="popup-letter">
+
+<button class="close-btn" onclick="closeLetter()">&times;</button>
+
+<div class="heart">💖</div>
+
+<div class="kitty-icon">🎀</div>
+
+<h2>Eres una muy buena Amiga,</h2>
+
+<div class="letter-content">
+
+<p>
+Hoy es tu día especial y quiero recordarte lo increíble que eres. Gracias por todo,
+por esas risas que pasamos esos dolores acompañados y todo lo que pasamos juntos.
+<br><br>
+
+Eres la mejor amiga que cualquiera podría tener, alguien muy especial
+Tu presencia hace que todo sea mejor, más especial y más divertido.
+<br><br>
+
+<span class="rpatz-mention">Que este año te traiga todo lo que deseas, incluyendo un encuentro con RPatz JAJAJAJ</span>
+</p>
+
+<p>
+Te deseo un año lleno de alegría, sueños cumplidos, películas increíbles y mucha felicidad.
+Que cada día sea una nueva razón para sonreír.
+<br><br>
+
+Eres lo mejor que ha pasado en mi vida. Gracias por estar siempre a mi lado,
+por tu sonrisa contagiosa y por ser simplemente tu.
+<br><br>
+
+<span class="rpatz-mention">Te quiero más que Robert Pattinson a la privacidad 😂</span>
+</p>
+
+</div>
+
+<p style="margin-top:20px;font-weight:bold;font-size:1.1em;">
+¡FELIZ CUMPLEAÑOS MINIUN! 👑 <span class="rpatz-icon">🎀</span>
+</p>
+
+<div class="heart">💖</div>
+
+</div>
+
+<audio id="cancion" src="cancion.mp3"></audio>
+
+</div>
+
+<script>
+
+function throwConfetti(){
+
+const canvas=document.getElementById("confetti-canvas")
+const ctx=canvas.getContext("2d")
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+let pieces=[]
+
+for(let i=0;i<200;i++){
+
+pieces.push({
+x:Math.random()*canvas.width,
+y:Math.random()*-canvas.height,
+size:8+Math.random()*12,
+speed:5+Math.random()*6
+})
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+pieces.forEach(p=>{
+
+ctx.fillStyle="#ff69b4"
+ctx.fillRect(p.x,p.y,p.size,p.size)
+
+p.y+=p.speed
+
+})
+
+requestAnimationFrame(draw)
+
+}
+
+draw()
+
+}
+
+function showSurprise(){
+
+throwConfetti()
+
+document.getElementById("popupLetterBg").classList.add("active")
+
+var cancion=document.getElementById("cancion")
+
+cancion.currentTime=0
+
+cancion.play()
+
+}
+
+function closeLetter(){
+
+document.getElementById("popupLetterBg").classList.remove("active")
+
+var cancion=document.getElementById("cancion")
+
+cancion.pause()
+cancion.currentTime=0
+
+}
+
+</script>
+
+</body>
+</html>
